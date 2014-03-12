@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reflection;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -75,6 +77,41 @@ namespace ED47.WordTemplate
             foreach (var footerPart in wordDocument.MainDocumentPart.FooterParts)
             {
                 Apply(footerPart.RootElement, isTopLevel: true);
+            }
+        }
+
+        public void Load(string collectionTagName, IEnumerable<object> data)
+        {
+            var collectionData = new List<WordTemplateData>();
+
+            foreach (var o in data)
+            {
+                var templateData = new WordTemplateData();
+                templateData.Load(o);
+                collectionData.Add(templateData);
+            }
+
+            Add(new CollectionData { TagName = collectionTagName, ElementData = collectionData });
+        }
+
+        public void Load(object data)
+        {
+            if (data == null)
+                return;
+
+            var type = data.GetType();
+
+            var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+            foreach (var propertyInfo in properties)
+            {
+                var value = propertyInfo.GetValue(data).ToString();
+
+                Add(new FieldData
+                {
+                    TagName = String.Format("{0}.{1}", type.Name, propertyInfo.Name),
+                    Value = value
+                });
             }
         }
     }

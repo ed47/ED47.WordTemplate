@@ -105,12 +105,12 @@ namespace ED47.WordTemplate
 
             foreach (var propertyInfo in properties)
             {
-                var value = propertyInfo.GetValue(data).ToString();
+                var value = propertyInfo.GetValue(data);
 
                 Add(new FieldData
                 {
                     TagName = String.Format("{0}.{1}", type.Name, propertyInfo.Name),
-                    Value = value
+                    Value = value != null ? value.ToString() : String.Empty
                 });
             }
         }

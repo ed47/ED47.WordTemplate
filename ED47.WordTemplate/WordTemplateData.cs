@@ -114,5 +114,17 @@ namespace ED47.WordTemplate
                 });
             }
         }
+
+        public void Load(string name, string data)
+        {
+            if (data == null)
+                return;
+            
+            Add(new FieldData
+            {
+                TagName = name,
+                Value = data
+            });
+        }
     }
 }

@@ -80,21 +80,21 @@ namespace ED47.WordTemplate
             }
         }
 
-        public void Load(string collectionTagName, IEnumerable<object> data)
+        public void Load(string collectionTagName, IEnumerable<object> data, string name = null)
         {
             var collectionData = new List<WordTemplateData>();
 
             foreach (var o in data)
             {
                 var templateData = new WordTemplateData();
-                templateData.Load(o);
+                templateData.Load(o, name);
                 collectionData.Add(templateData);
             }
 
             Add(new CollectionData { TagName = collectionTagName, ElementData = collectionData });
         }
 
-        public void Load(object data)
+        public void Load(object data, string name = null)
         {
             if (data == null)
                 return;
@@ -109,7 +109,7 @@ namespace ED47.WordTemplate
 
                 Add(new FieldData
                 {
-                    TagName = String.Format("{0}.{1}", type.Name, propertyInfo.Name),
+                    TagName = String.Format("{0}.{1}", name ?? type.Name, propertyInfo.Name),
                     Value = value != null ? value.ToString() : String.Empty
                 });
             }

@@ -107,10 +107,20 @@ namespace ED47.WordTemplate
             {
                 var value = propertyInfo.GetValue(data);
 
+                if (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetInterface("IEnumerable") != null)
+                {
+                    if (value != null)
+                    {
+                        Load(String.Format("{0}.{1}", name ?? type.Name, propertyInfo.Name), (IEnumerable<object>) value);
+                    }
+
+                    continue;
+                }
+                
                 Add(new FieldData
                 {
                     TagName = String.Format("{0}.{1}", name ?? type.Name, propertyInfo.Name),
-                    Value = value != null ? value.ToString() : String.Empty
+                    Value = value != null ? value.ToString().Trim() : String.Empty
                 });
             }
         }

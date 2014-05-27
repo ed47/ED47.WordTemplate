@@ -44,6 +44,14 @@ namespace ED47.WordTemplate.Demo
                                             TagName = "Change",
                                             Value = Guid.NewGuid().ToString()
                                         }
+                                    },
+                                    new WordTemplateData
+                                    {
+                                        new FieldData
+                                        {
+                                            TagName = "Change",
+                                            Value = Guid.NewGuid().ToString()
+                                        }
                                     }
                                 }
                             }

@@ -56,12 +56,12 @@ namespace ED47.WordTemplate
                             sdtContent.AppendChild(clone);
                         else
                         {
-                            sdt.Parent.InsertAfter(clone, sdt);
+                            sdtContent.AppendChild(clone);
                         }
                     }
 
-                    if (!isTopLevel)
-                        sdt.Remove();
+                    /*if (!isTopLevel)
+                        sdt.Remove();*/
 
                     elementData.Apply(allClones, isTopLevel: false);
                 }

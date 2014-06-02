@@ -84,7 +84,7 @@ namespace ED47.WordTemplate
         {
             var collectionData = new List<WordTemplateData>();
 
-            foreach (var o in data)
+            foreach (var o in data.Reverse()) //Reversing order because items are inserted after placeholder
             {
                 var templateData = new WordTemplateData();
                 templateData.Load(o, name);

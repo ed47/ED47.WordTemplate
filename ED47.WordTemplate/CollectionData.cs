@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -35,13 +36,25 @@ namespace ED47.WordTemplate
 
                 var templateSdt = Template.FirstOrDefault(el => OpenXmlHelper.GetTag(el) == tagName);
 
-                if(templateSdt == null)
+                if (templateSdt == null)
+                {
                     continue;
+                }
                 
                 var sdtContent = sdt.GetFirstChild<SdtContentBlock>();
                 sdtContent.RemoveAllChildren();
-
+                
                 var templateElements = templateSdt.GetFirstChild<SdtContentBlock>().Elements().ToList();
+
+                if (!ElementData.Any() && isTopLevel)
+                {
+                    var p = new Paragraph();
+                    var r = new Run();
+                    var text = new Text("-");
+                    r.AppendChild(text);
+                    p.AppendChild(r);
+                    sdtContent.AppendChild(p);
+                }
 
                 foreach (var elementData in ElementData)
                 {
@@ -56,15 +69,15 @@ namespace ED47.WordTemplate
                             sdtContent.AppendChild(clone);
                         else
                         {
-                            sdtContent.AppendChild(clone);
+                            sdt.Parent.InsertAfter(clone, sdt);
                         }
                     }
 
-                    /*if (!isTopLevel)
-                        sdt.Remove();*/
-
                     elementData.Apply(allClones, isTopLevel: false);
                 }
+
+                if (!isTopLevel)
+                    sdt.Remove();
             }
         }
     }

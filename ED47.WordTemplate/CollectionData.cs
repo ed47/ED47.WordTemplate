@@ -68,7 +68,7 @@ namespace ED47.WordTemplate
                             sdtContent.AppendChild(clone);
                         else
                         {
-                            sdt.Parent.InsertAfter(clone, sdt);
+                            sdt.Parent.InsertBefore(clone, sdt);
                         }
                     }
 
